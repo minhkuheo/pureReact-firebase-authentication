@@ -4,6 +4,7 @@ import { compose } from 'recompose';
 import { withFirebase } from '../Firebase';
 
 import { SignUpLink } from '../SignUp';
+import { PasswordForgetLink } from '../PasswordForget';
 
 import * as ROUTES from '../../constants/routes';
 
@@ -11,6 +12,7 @@ const SignIn = () => (
     <div>
         <h1>Please Sign In</h1>
         <SignInForm />
+        <PasswordForgetLink />
         <SignUpLink />
     </div>
 );

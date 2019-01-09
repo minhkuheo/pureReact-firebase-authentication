@@ -7,11 +7,19 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 
-  background-image: linear-gradient(to bottom right, cadetblue, cornflowerblue);
-  color: white;
+  /* background-image: linear-gradient(to bottom right, cadetblue, cornflowerblue); */
+  background-color: #343148;
+  color: #F0F0F0;
 }
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
+}
+
+a {
+  color: #95DEE3;
+}
+a:hover {
+   color: #F1EA7F
 }

@@ -1,17 +1,27 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-
+import { AuthUserContext } from '../Session';
 import SignOutButton from '../SignOut';
 import * as ROUTES from '../../constants/routes';
 
-const NavigationMainMenu = ({authUser}) => (
-    <div>
+// const NavigationMainMenu = ({authUser}) => (
+//     <div>
+//         {
+//             authUser
+//                 ? <NavigationAuth />
+//                 : <NavigationNonAuth />
+//         }
+//     </div>
+// );
+const NavigationMainMenu = () => (
+    <AuthUserContext.Consumer>
         {
-            authUser
-                ? <NavigationAuth />
-                : <NavigationNonAuth />
+            authUser =>
+                authUser
+                    ?   <NavigationAuth />
+                    :   <NavigationNonAuth />
         }
-    </div>
+    </AuthUserContext.Consumer>
 );
 
 const NavigationAuth = () => (
