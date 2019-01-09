@@ -1,3 +1,9 @@
+A begin framework that use:
+Pure React 16.7
+Firebase
+SessionStorage
+
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
