@@ -26,7 +26,7 @@ const withAuthorization = (conditionalFunction) => Component => {
         componentDidMount() {
             const { firebase } = this.props;
             this.listener = firebase.auth.onAuthStateChanged(authUser => {
-                if (!conditionalFunction(authUser)) {
+                if (!authUser || !conditionalFunction(authUser)) {
                     this.props.history.push(SIGN_IN);
                 }
             });
@@ -41,7 +41,7 @@ const withAuthorization = (conditionalFunction) => Component => {
                 <AuthUserContext.Consumer>
                     {
                         authUser =>
-                            conditionalFunction(authUser)
+                            !authUser || conditionalFunction(authUser)
                                 ?   <Component {...this.props} />
                                 :   null
                     }

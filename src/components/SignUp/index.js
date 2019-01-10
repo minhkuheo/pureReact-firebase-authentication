@@ -38,6 +38,9 @@ class SignUpFormClass extends React.Component {
 
         firebase.doCreateUserWithEmailAndPassword(email, passwordOne)
         .then(authUser => {
+            return firebase.user(authUser.user.uid).set({username, email});
+        })
+        .then(() => {
           this.setState({ ...INITIAL_STATE });
           this.props.history.push(ROUTES.HOME);
         })
