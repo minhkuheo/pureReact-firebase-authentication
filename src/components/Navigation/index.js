@@ -28,13 +28,16 @@ const NavigationAuth = () => (
     <div>
         <ul>
             <li>
-                <Link to={ROUTES.HOME}>Home</Link>
+                <Link to={ROUTES.LANDING}><h2>Landing</h2></Link>
             </li>
             <li>
-                <Link to={ROUTES.ACCOUNT}>Account</Link>
+                <Link to={ROUTES.HOME}><h2>Home</h2></Link>
             </li>
             <li>
-                <Link to={ROUTES.ADMIN}>Admin</Link>
+                <Link to={ROUTES.ACCOUNT}><h2>Account</h2></Link>
+            </li>
+            <li>
+                <Link to={ROUTES.ADMIN}><h2>Admin</h2></Link>
             </li>
             <li>
                 <SignOutButton />
@@ -47,10 +50,10 @@ const NavigationNonAuth = () => (
     <div>
         <ul>
             <li>
-                <Link to={ROUTES.LANDING}>Landing</Link>
+                <Link to={ROUTES.LANDING}><h2>Landing</h2></Link>
             </li>
             <li>
-                <Link to={ROUTES.SIGN_IN}>Sign In</Link>
+                <Link to={ROUTES.SIGN_IN}><h2>Sign In</h2></Link>
             </li>
         </ul>
     </div>

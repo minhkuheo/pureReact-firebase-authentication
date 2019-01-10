@@ -18,6 +18,7 @@ const App = () => (
         <header>
             <Navigation />
         </header>
+        <hr />
         <main>
             <Switch>
                 <Route exact path={ROUTES.LANDING} component={LandingPage} />

@@ -23,3 +23,15 @@ a {
 a:hover {
    color: #F1EA7F
 }
+
+.column {
+  float: left;
+  padding: 10px;
+}
+
+/* Clear floats after the columns */
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
