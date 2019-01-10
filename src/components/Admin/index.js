@@ -1,14 +1,18 @@
 import React from 'react';
+import { withAuthorization } from '../Session';
 
 class AdminPage extends React.Component {
     
     render() {
         return (
             <div>
-                Hehe - Admin page
+                <h2>This is Admin Homepage</h2>
+                <p>Only admin alone can access this page.</p>
             </div>
         )
     }
 }
 
-export default AdminPage;
+const condition = (authUser) => authUser.role === 'ADMIN'; 
+
+export default withAuthorization(condition)(AdminPage);

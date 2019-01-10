@@ -2,28 +2,35 @@ import React from 'react';
 import PasswordChangeForm from '../PasswordChange';
 import { PasswordForgetForm } from '../PasswordForget';
 
-import { AuthUserContext } from '../Session';
+import { AuthUserContext, withAuthorization } from '../Session';
 
 class AccountPage extends React.Component {
     render() {
         console.log(this.context);
         return (
-            <div>
-                <h1>Account page</h1>
-                <AuthUserContext.Consumer>
-                    {
-                        authUser => (<h3>Welcome: {(authUser || {}).email}</h3>)
-                    }
-                </AuthUserContext.Consumer>
+            <AuthUserContext.Consumer>
+                {
+                    authUser => (
+                        <div>
+                            <h1>Account page</h1>
+                            <h1>Account: { authUser.email }</h1>
 
-                <PasswordChangeForm />
-                <hr />
-                <PasswordForgetForm />
-            </div>
+                            <h3>Note: The authorization for now is set on broad-grained !!!</h3>
+                            <div style={{ textAlign: 'center' }}>
+                                <PasswordChangeForm />
+                                <br />
+                                <PasswordForgetForm />
+                            </div>
+                        </div>            
+                    )
+                }
+            </AuthUserContext.Consumer>
         )
     }
 }
 
 AccountPage.contextType = AuthUserContext;
 
-export default AccountPage;
+const condition = authUser => !!authUser;
+
+export default withAuthorization(condition)(AccountPage);
