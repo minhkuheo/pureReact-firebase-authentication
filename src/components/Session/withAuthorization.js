@@ -26,7 +26,26 @@ const withAuthorization = (conditionalFunction) => Component => {
         componentDidMount() {
             const { firebase } = this.props;
             this.listener = firebase.auth.onAuthStateChanged(authUser => {
-                if (!authUser || !conditionalFunction(authUser)) {
+                if (authUser) {
+                    firebase.user(authUser.uid).once('value')
+                    .then(snapShot => {
+                        const loggedInUser = snapShot.val();
+                        
+                        // guess.roles is null
+                        if (!loggedInUser.roles) {
+                            loggedInUser.roles = [];
+                        }
+
+                        authUser = {}
+
+                        if (!conditionalFunction(authUser)) {
+                            this.props.history.push(SIGN_IN);
+                        }
+                    }).catch(err => {
+                        console.log(err);
+                    })
+
+                } else {
                     this.props.history.push(SIGN_IN);
                 }
             });
