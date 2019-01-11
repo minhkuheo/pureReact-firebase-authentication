@@ -2,7 +2,8 @@ import React from 'react';
 import { withFirebase } from '../Firebase';
 import AuthUserContext from './context';
 
-/** This HOC checks for the session authentication
+/** The goal of this HOC:
+ *      checks for the session authentication
  * 
  * @param {Object} Component a React component
  */
@@ -18,11 +19,17 @@ const withAuthentication = Component => {
 
         componentDidMount() {
             const { firebase } = this.props;
-            this.listener = firebase.auth.onAuthStateChanged(authUser => {
-                authUser
-                    ?   this.setState({ authUser: authUser, loading: false })
-                    :   this.setState({ authUser: null, loading: false });
-            });
+            // this.listener = firebase.auth.onAuthStateChanged(authUser => {
+            //     authUser
+            //         ?   this.setState({ authUser: authUser, loading: false })
+            //         :   this.setState({ authUser: null, loading: false });
+            // });
+            this.listener = firebase.onAuthUserListener(
+                // parameter 1: on success call this function
+                authUser => this.setState({ authUser: authUser, loading: false }),
+                // parameter 2: on fallback call this function
+                () => this.setState({ authUser: null, loading: false })
+            );
         }
         
         componentWillUnmount() {

@@ -2,6 +2,7 @@ import React from 'react';
 import { compose } from 'recompose';
 import { withFirebase } from '../Firebase';
 import { withAuthorization } from '../Session';
+import * as ROLES from '../../constants/roles';
 
 class AdminPage extends React.Component {
     constructor(props) {
@@ -63,7 +64,6 @@ const UserList = ({ users }) => (
     </ul>
 );
 
-// Assume it is ok for now
-const condition = (authUser) => authUser.email === 'minh1@test.dk';
+const condition = authUser => authUser && authUser.roles.includes(ROLES.ADMIN);
 
 export default compose(withFirebase, withAuthorization(condition))(AdminPage);

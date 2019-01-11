@@ -22,6 +22,37 @@ class Firebase {
         this.db = app.database();
     }
 
+    // These 2 functions that we wish to execute at the end of the onAuthStateChanged at the source code.
+    // in this case, it's withAuthentication and withAuthorization.
+    onAuthUserListener = (onSuccessCallThisFunction, onFallbackCallThisFunction) => {
+        console.log('the listener is being called');
+        return this.auth.onAuthStateChanged(authUser => {
+            if (authUser) {
+                this.user(authUser.uid).once('value').then(userSnapshot => {
+                    const userData = userSnapshot.val();
+
+                    // Determine the role - the roles property is stored in array form in the DB
+                    if (!userData.roles) {
+                        userData.roles = [];
+                    }
+
+                    // console.log(authUser);
+                    
+                    // Merge Auth and DB user data to our convenience
+                    authUser = {
+                        uid: authUser.uid,
+                        email: authUser.email,
+                        ...userData,
+                    };
+
+                    // console.log(authUser);
+                    onSuccessCallThisFunction(authUser);
+                });
+            } else {
+                onFallbackCallThisFunction();
+            }
+        });
+    }
     
     /** **************************************************
      *                      Auth API

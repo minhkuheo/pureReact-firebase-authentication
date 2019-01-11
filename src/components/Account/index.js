@@ -6,7 +6,6 @@ import { AuthUserContext, withAuthorization } from '../Session';
 
 class AccountPage extends React.Component {
     render() {
-        console.log(this.context);
         return (
             <AuthUserContext.Consumer>
                 {

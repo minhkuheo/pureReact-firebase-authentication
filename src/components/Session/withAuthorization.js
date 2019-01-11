@@ -18,6 +18,12 @@ import AuthUserContext from './context';
  *      // permission-based authorization
  *          const condition = authUser => authUser.permissions.canEditAccount;
  * 
+ * ------------------------------------------------------------------------------------------
+ * 
+ *  The goal of this HOC:
+ *      check the user role of signing / signed in user
+ * 
+ * 
  * @param {Function} conditionalFunction : A function that is passed individually from each page that need to be protected according to the role-base
  */
 const withAuthorization = (conditionalFunction) => Component => {
@@ -25,33 +31,52 @@ const withAuthorization = (conditionalFunction) => Component => {
 
         componentDidMount() {
             const { firebase } = this.props;
-            this.listener = firebase.auth.onAuthStateChanged(authUser => {
-                if (authUser) {
-                    firebase.user(authUser.uid).once('value')
-                    .then(snapShot => {
-                        const loggedInUser = snapShot.val();
-                        
-                        // guess.roles is null
-                        if (!loggedInUser.roles) {
-                            loggedInUser.roles = [];
-                        }
 
-                        authUser = {}
+            this.listener = firebase.onAuthUserListener(
+                // on success call this callback function
+                authUser => {
+                    if (!conditionalFunction(authUser)) {
+                        this.props.history.push(SIGN_IN);
+                    }
+                },
+                // on fallback call this callback function
+                () => this.props.history.push(SIGN_IN),
+            );
 
-                        if (!conditionalFunction(authUser)) {
-                            this.props.history.push(SIGN_IN);
-                        }
-                    }).catch(err => {
-                        console.log(err);
-                    })
+            // this.listener = firebase.auth.onAuthStateChanged(authUser => {
+            //     if (authUser) {
+            //         firebase.user(authUser.uid).once('value')
+            //         .then(snapShot => {
+            //             const loggedInUser = snapShot.val();
 
-                } else {
-                    this.props.history.push(SIGN_IN);
-                }
-            });
+            //             // guess.roles is null
+            //             if (!loggedInUser.roles) {
+            //                 loggedInUser.roles = [];
+            //             }
+
+            //             authUser = {
+            //                 uid: authUser.uid,
+            //                 email: authUser.email,
+            //                 ...loggedInUser,
+            //             };
+
+            //             if (!conditionalFunction(authUser)) {
+            //                 this.props.history.push(SIGN_IN);
+            //             }
+            //         }).catch(err => {
+            //             console.log(err);
+            //         })
+
+            //     } else {
+            //         this.props.history.push(SIGN_IN);
+            //     }
+            // });
         }
 
         componentWillUnmount() {
+            /**
+             * avoid memory leaks that lead to performance issues ==> remove the listener if the component unmounts.
+             */
             this.listener();
         }
 
@@ -61,8 +86,8 @@ const withAuthorization = (conditionalFunction) => Component => {
                     {
                         authUser =>
                             !authUser || conditionalFunction(authUser)
-                                ?   <Component {...this.props} />
-                                :   null
+                                ? <Component {...this.props} />
+                                : null
                     }
                 </AuthUserContext.Consumer>
             );
