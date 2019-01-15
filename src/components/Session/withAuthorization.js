@@ -28,19 +28,22 @@ import AuthUserContext from './context';
  */
 const withAuthorization = (conditionalFunction) => Component => {
     class WithAuthorization extends React.Component {
-
         componentDidMount() {
             const { firebase } = this.props;
 
             this.listener = firebase.onAuthUserListener(
                 // on success call this callback function
                 authUser => {
+                    console.log('withAuthorization onSucess');
                     if (!conditionalFunction(authUser)) {
                         this.props.history.push(SIGN_IN);
                     }
                 },
                 // on fallback call this callback function
-                () => this.props.history.push(SIGN_IN),
+                () => {
+                    console.log('withAuthorization onFallback');
+                    this.props.history.push(SIGN_IN);
+                },
             );
 
             // this.listener = firebase.auth.onAuthStateChanged(authUser => {
@@ -83,11 +86,22 @@ const withAuthorization = (conditionalFunction) => Component => {
         render() {
             return (
                 <AuthUserContext.Consumer>
+                    {/* {
+                        authUser => {
+                            console.log(!authUser)
+                            console.log(conditionalFunction(authUser))
+                            return (
+                                conditionalFunction(authUser)
+                                    ? <Component {...this.props} />
+                                    : null
+                            )
+                        }
+                    } */}
                     {
                         authUser =>
-                            !authUser || conditionalFunction(authUser)
-                                ? <Component {...this.props} />
-                                : null
+                            conditionalFunction(authUser)
+                                ?   <Component {...this.props} />
+                                :   null
                     }
                 </AuthUserContext.Consumer>
             );

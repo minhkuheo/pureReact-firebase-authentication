@@ -1,7 +1,6 @@
 import React from 'react';
 import PasswordChangeForm from '../PasswordChange';
 import { PasswordForgetForm } from '../PasswordForget';
-
 import { AuthUserContext, withAuthorization } from '../Session';
 
 class AccountPage extends React.Component {
@@ -27,8 +26,6 @@ class AccountPage extends React.Component {
         )
     }
 }
-
-AccountPage.contextType = AuthUserContext;
 
 const condition = authUser => !!authUser;
 

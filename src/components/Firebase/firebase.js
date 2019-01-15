@@ -20,6 +20,9 @@ class Firebase {
 
         this.auth = app.auth();
         this.db = app.database();
+
+        // https://firebase.google.com/docs/auth/web/facebook-login?authuser=1
+        this.facebookProvider = new app.auth.FacebookAuthProvider();
     }
 
     // These 2 functions that we wish to execute at the end of the onAuthStateChanged at the source code.
@@ -28,6 +31,7 @@ class Firebase {
         console.log('the listener is being called');
         return this.auth.onAuthStateChanged(authUser => {
             if (authUser) {
+                // console.log('[authUser]', authUser);
                 this.user(authUser.uid).once('value').then(userSnapshot => {
                     const userData = userSnapshot.val();
 
@@ -46,9 +50,11 @@ class Firebase {
                     };
 
                     // console.log(authUser);
+                    console.log('onSuccess');
                     onSuccessCallThisFunction(authUser);
                 });
             } else {
+                console.log('onFallback');
                 onFallbackCallThisFunction();
             }
         });
@@ -62,6 +68,12 @@ class Firebase {
 
     doSignInWithEmailAndPassword = (email, password) =>
         this.auth.signInWithEmailAndPassword(email, password);
+
+    doSignInUsingTheFace = () =>
+        this.auth.signInWithPopup(this.facebookProvider);
+
+    doSignInWithFacebook = () =>
+        this.auth.signInWithPopup(this.facebookProvider);
 
     doSignOut = () => this.auth.signOut();
 

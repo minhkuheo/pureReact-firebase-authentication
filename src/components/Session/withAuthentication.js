@@ -26,9 +26,21 @@ const withAuthentication = Component => {
             // });
             this.listener = firebase.onAuthUserListener(
                 // parameter 1: on success call this function
-                authUser => this.setState({ authUser: authUser, loading: false }),
+                authUser => {
+                    console.log('withAuthentication onSucess');
+                    this.setState({ 
+                        authUser: authUser, 
+                        loading: false 
+                    });
+                },
                 // parameter 2: on fallback call this function
-                () => this.setState({ authUser: null, loading: false })
+                () => {
+                    console.log('withAuthentication onFallback');
+                    this.setState({ 
+                        authUser: null,
+                        loading: false
+                    });
+                }
             );
         }
         
