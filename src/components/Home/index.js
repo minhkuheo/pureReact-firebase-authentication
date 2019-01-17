@@ -1,5 +1,6 @@
 import React from 'react';
-import { withAuthorization } from '../Session';
+import { compose } from 'recompose';
+import { withAuthorization, withEmailVerification } from '../Session';
 
 class HomePage extends React.Component {
     
@@ -7,7 +8,7 @@ class HomePage extends React.Component {
         return (
             <div>
                 <h2>This is the home page</h2>
-                <p>Only registered user may access this page</p>
+                <p>Only registered and verified user may access this page</p>
             </div>
         )
     }
@@ -15,4 +16,7 @@ class HomePage extends React.Component {
 
 const condition = authUser => !!authUser;
 
-export default withAuthorization(condition)(HomePage);
+export default compose(
+    withEmailVerification,
+    withAuthorization(condition)
+)(HomePage);

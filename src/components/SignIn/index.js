@@ -5,6 +5,7 @@ import { PasswordForgetLink } from '../PasswordForget';
 
 import SignInEmailPassword from './SignInEmailPassword'
 import SignInFacebook from './SignInFacebook';
+import SignInGoogle from './SignInGoogle';
 
 const SignIn = () => (
     <div>
@@ -13,8 +14,8 @@ const SignIn = () => (
         <SignInEmailPassword />
         <PasswordForgetLink />
         <br />
-        <h3>Sign in using Facebook</h3>
         <SignInFacebook />
+        <SignInGoogle />
         <br />
         <SignUpLink />
     </div>

@@ -15,7 +15,15 @@ const SignUp = () => (
 
 export default SignUp;
 
+const ERROR_CODE_ACCOUNT_EXISTS = 'auth/email-already-in-use';
 
+const ERROR_MSG_ACCOUNT_EXISTS = `
+  An account with this email address already exists.
+  Try to login with this account instead. If you think the
+  account is already used from one of the social logins, try
+  to sign in with one of them. Afterward, associate your accounts
+  on your personal account page.
+`;
 
 
 
@@ -48,10 +56,16 @@ class SignUpFormClass extends React.Component {
                 return firebase.user(authUser.user.uid).set({ username, email, roles });
             })
             .then(() => {
+                return firebase.doSendEmailVerification();
+            })
+            .then(() => {
                 this.setState({ ...INITIAL_STATE });
                 this.props.history.push(ROUTES.HOME);
             })
             .catch(error => {
+                if (error.code === ERROR_CODE_ACCOUNT_EXISTS) {
+                    error.message = ERROR_MSG_ACCOUNT_EXISTS;
+                }
                 this.setState({ error });
             });
 
@@ -81,7 +95,7 @@ class SignUpFormClass extends React.Component {
             email === '' ||
             username === '';
 
-        console.log(this.props);
+        console.log(error);
         return (
             <form onSubmit={this.onSubmitSigningUp}>
                 <ul>
@@ -121,6 +135,7 @@ class SignUpFormClass extends React.Component {
                             placeholder="Confirm Password"
                         />
                     </li>
+                    <br />
                     <li>
                         <label>
                             Admin: (Only for testing Admin assignation)
@@ -132,12 +147,19 @@ class SignUpFormClass extends React.Component {
                             />
                         </label>
                     </li>
+                    <br />
                     <li>
                         <button className="button button1" disabled={isInvalid} type="submit">Sign Up</button>
                     </li>
                 </ul>
 
-                {error && <p>{error.message}</p>}
+                {
+                    error && 
+                    <div>
+                        <p style={{ color: '#F2552C' }}>Ups! Something is not right...</p>
+                        <p style={{ color: '#F2552C' }}>{error.message}</p>
+                    </div>
+                }
             </form>
         );
     }
@@ -159,5 +181,5 @@ const SignUpForm = compose(
 
 export {
     // SignUpForm, 
-    SignUpLink
+    SignUpLink,
 };

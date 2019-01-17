@@ -20,18 +20,18 @@ class SignInFacebook extends React.Component {
         this.state = { error: null }
     }
 
-    doSignInUsingTheFace = (event) => {
+    doSignInUsingGoogle = (event) => {
         const { firebase } = this.props;
 
-        firebase.doSignInUsingTheFace()
-        .then(facebookAuthUser => {
+        firebase.doSignInWithGoogle()
+        .then(googleAuthUser => {
             // console.log('[facebookAuthUser]', facebookAuthUser);
             // alert('stop lige');
-            if (facebookAuthUser.additionalUserInfo.isNewUser) {
+            if (googleAuthUser.additionalUserInfo.isNewUser) {
                 // Create a user in your Firebase Realtime Database too
-                return firebase.user(facebookAuthUser.user.uid).set({
-                    username: facebookAuthUser.additionalUserInfo.profile.name,
-                    email: facebookAuthUser.additionalUserInfo.profile.email,
+                return firebase.user(googleAuthUser.user.uid).set({
+                    username: googleAuthUser.additionalUserInfo.profile.name,
+                    email: googleAuthUser.additionalUserInfo.profile.email,
                     roles: [],
                 });
             } else {
@@ -55,8 +55,8 @@ class SignInFacebook extends React.Component {
     render() {
         const { error } = this.state;
         return (
-            <form onSubmit={this.doSignInUsingTheFace}>
-                <button className="loginBtn loginBtn--facebook" type="submit">Facebook sign in</button>
+            <form onSubmit={this.doSignInUsingGoogle}>
+                <button className="loginBtn loginBtn--google" type="submit">Google sign in</button>
                 { error && <p>{error.message}</p>}
             </form>
         );

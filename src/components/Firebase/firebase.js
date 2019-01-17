@@ -18,11 +18,13 @@ class Firebase {
     constructor() {
         app.initializeApp(config);
 
+        this.emailAuthProvider = app.auth.EmailAuthProvider;
         this.auth = app.auth();
         this.db = app.database();
 
         // https://firebase.google.com/docs/auth/web/facebook-login?authuser=1
         this.facebookProvider = new app.auth.FacebookAuthProvider();
+        this.googleProvider = new app.auth.GoogleAuthProvider();
     }
 
     // These 2 functions that we wish to execute at the end of the onAuthStateChanged at the source code.
@@ -46,6 +48,8 @@ class Firebase {
                     authUser = {
                         uid: authUser.uid,
                         email: authUser.email,
+                        emailVerified: authUser.emailVerified,
+                        providerData: authUser.providerData,
                         ...userData,
                     };
 
@@ -72,8 +76,8 @@ class Firebase {
     doSignInUsingTheFace = () =>
         this.auth.signInWithPopup(this.facebookProvider);
 
-    doSignInWithFacebook = () =>
-        this.auth.signInWithPopup(this.facebookProvider);
+    doSignInWithGoogle = () =>
+        this.auth.signInWithPopup(this.googleProvider);
 
     doSignOut = () => this.auth.signOut();
 
@@ -82,6 +86,11 @@ class Firebase {
     doPasswordUpdate = (password) =>
         this.auth.currentUser.updatePassword(password);
 
+    doSendEmailVerification = () =>
+        this.auth.currentUser.sendEmailVerification({
+            url: process.env.REACT_APP_FIREBASE_CONFIRMATION_EMAIL_REDIRECT
+        });
+    
     /** **************************************************
      *                      User API
      * ***************************************************/
